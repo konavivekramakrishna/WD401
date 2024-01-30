@@ -208,8 +208,8 @@ Now, the conflicting changes from Branch A are successfully merged into the main
 
 ## CI/CD Integration:
 
-> Using node packages like prettier, eslint, jest, husky to formate the code and these ensures the code quality standards.
-> These tests runs after commiting the changes to the files.
+> Using node packages like prettier, eslint, jest, and husky to formate the code and these ensure the code quality standards.
+> These tests run after committing the changes to the files.
 
 ### This is basic CI/CD integration with test suites:
 
@@ -227,20 +227,21 @@ test("creating a new session", async () => {
   const agent = request.agent(server);
   // ... (your test logic here)
 });
+```
 
-> If these test suite fails then merging and pushing for the pull-request is denied this ensures the code quality checks and expected working.
+> If these test suites fail then merging and pushing for the pull-request is denied this ensures the code quality checks and expected working.
 
 ## Using Github Actions for Tests and Quality checks and also to deploy:
 
 CI/CD Integration
 For Continuous Integration and Continuous Development:
 
-1.I use GitHub Actions for automatic testing when a PR is made.
+1. I use GitHub Actions for automatic testing when a PR is made.
 
-2.I integrate preview deployments for each PR.
+2. I integrate preview deployments for each PR.
 
-3.I use testing frameworks such as Cypress .
+3. I use testing frameworks such as Cypress.
 
-4.I integrate tools like CodeClimate and CircleCI to help identify code smells and avoid repetition in the code by following the DRY (Don't Repeat Yourself) principle.
+4. I integrate tools like CodeClimate and CircleCI to help identify code smells and avoid repetition in the code by following the DRY (Don't Repeat Yourself) principle.
 
 
