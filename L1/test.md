@@ -23,7 +23,7 @@ try {
     console.log('Sign-up successful');
 
     const data = await response.json();
-    // use then clause
+    //Use then clause
     localStorage.setItem('authToken', data.token);
     localStorage.setItem('userData', =JSON.stringify(data.user));
     navigate("/dashboard");
@@ -40,7 +40,7 @@ console.error('Sign-up failed:');
 const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
   event.preventDefault();
 
-  // make code more readble and understnable
+  // make code more readable and understandable
   const data = JSON.stringify({
     name: organisationName,
     user_name: userName,
@@ -90,6 +90,8 @@ const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
 5.Improve code standards, including possible enhancements and optimizations.
 
 6.Finally, convert the draft PR to one that is ready for review.
+
+![image](https://github.com/konavivekramakrishna/WD401/assets/101407963/3af7b2f9-d90e-4a5a-8924-8324f7b46c4f)
 
 ## Resolving Merge Conflicts
 
