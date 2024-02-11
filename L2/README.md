@@ -88,7 +88,7 @@ Advantages
 
 we can show a loader until a import is successful
 
-## Introduction to Import Maps
+## Import Maps
 
 Import maps provide a mechanism for mapping module specifiers to URLs, enabling dynamic loading of modules without bundling. Advantages include:
 
