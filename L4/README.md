@@ -197,6 +197,7 @@ describe("Todo Application", function () {
   });
 });
 ```
+
 ![alt text](image-3.png)
 ![alt text](image-2.png)
 
@@ -286,3 +287,147 @@ describe("Todo App Test,", () => {
 ```
 
 ![alt text](image-4.png)
+
+### Github Actions Walkthrough:
+
+```yaml
+name: CI/CD
+# Triggers the workflow on every push event
+on: push
+
+# Environment variables
+
+env:
+  PG_DATABASE: "${{ secrets.POSTGRES_DATABASE }}"
+  PG_USER: "${{ secrets.POSTGRES_USER }}"
+  PG_PASSWORD: "${{ secrets.POSTGRES_PASSWORD }}"
+
+# Jobs
+jobs:
+  # Job to run tests
+
+  run-tests:
+    # Runs on Ubuntu latest version
+
+    runs-on: ubuntu-latest
+
+    # Define a PostgreSQL service for running tests
+    services:
+      postgres:
+        image: postgres:11.7
+        env:
+          POSTGRES_USER: "postgres"
+          POSTGRES_PASSWORD: "postgres"
+          POSTGRES_DB: "wd-todo-test"
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+
+    # Steps to execute within the job
+    steps:
+      # Check out repository code
+      - name: Check out repository code
+        uses: actions/checkout@v3
+
+        # Install dependencies
+      - name: Install dependencies
+        run: npm ci
+      # Run unit tests
+      - name: Run unit tests
+        run: npm test
+      # Run the app
+      - name: Run the app
+        id: run-app
+        run: |
+          npx sequelize-cli db:drop
+          npx sequelize-cli db:create
+          npx sequelize-cli db:migrate
+          PORT=3000 npm start &
+          sleep 5
+      # Run integration tests
+      - name: Run integration tests
+        run: |
+          npm install cypress cypress-json-results
+          npx cypress run
+
+  # Job to deploy the app to production
+  deploy:
+    # Define the job dependencies
+    needs: run-tests
+    runs-on: ubuntu-latest
+    if: needs.run-tests.result == 'success'
+
+    # Steps to execute within the job
+    steps:
+      # Deploy to production using a custom action
+      - name: Deploy to production
+        uses: johnbeynon/render-deploy-action@v0.0.8
+        with:
+          service-id: "${{ secrets.MY_RENDER_SERVICE_ID }}"
+          api-key: "${{ secrets.MY_RENDER_API_KEY }}"
+
+  # Job to send Slack notifications
+  notify:
+    # Define the job dependencies
+    needs: [run-tests, deploy]
+    runs-on: ubuntu-latest
+
+    if: ${{ always() }}
+    steps:
+      - name: Send Slack notification on success
+
+        # Send a Slack notification if the tests and deployment are successful
+        if: ${{ needs.run-tests.result == 'success' && needs.deploy.result == 'success' }}
+        uses: slackapi/slack-github-action@v1.25.0
+        with:
+          payload: |
+            {
+              "text": "CI/CD process succeeded!" 
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+
+      - name: Send Slack notification on failure
+        if: ${{ needs.run-tests.result != 'success' || needs.deploy.result != 'success' }}
+        uses: slackapi/slack-github-action@v1.25.0
+        with:
+          payload: |
+            {
+              "text": "*${{ github.workflow }}* failed. Access the details https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}."
+               
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+```
+
+![alt text](image-5.png)
+
+This GitHub Actions workflow automates the Continuous Integration (CI) and Continuous Deployment (CD) process for a Node.js application. The workflow consists of three main jobs:
+
+1. **run-tests**: Runs unit tests and integration tests for the application.
+2. **deploy**: Deploys the application to production.
+3. **notify**: Sends Slack notifications based on the success or failure of the tests and deployment.
+
+The workflow is triggered on every push event to the repository.
+
+## Env Variables
+```yaml
+env:
+  PG_DATABASE: "${{ secrets.POSTGRES_DATABASE }}"
+  PG_USER: "${{ secrets.POSTGRES_USER }}"
+  PG_PASSWORD: "${{ secrets.POSTGRES_PASSWORD }}"
+```
+
+### jobs:
+
+1. **run-tests**: This job runs on the latest version of Ubuntu and defines a PostgreSQL service for running tests. The steps include checking out the repository code, installing dependencies, running unit tests, running the application, and executing integration tests using Cypress.
+
+2. **deploy**: This job runs on the latest version of Ubuntu and is triggered if the run-tests job is successful. It deploys the application to production using a custom action that interacts with the Render platform.
+
+3. **notify**: This job sends Slack notifications based on the success or failure of the tests and deployment. It includes steps to send Slack notifications using the slackapi/slack-github-action action.
+
+The workflow demonstrates a comprehensive CI/CD setup for a Node.js application, including testing, deployment, and notifications.
