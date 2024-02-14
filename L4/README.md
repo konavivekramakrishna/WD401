@@ -425,6 +425,9 @@ env:
   PG_DATABASE: "${{ secrets.POSTGRES_DATABASE }}"
   PG_USER: "${{ secrets.POSTGRES_USER }}"
   PG_PASSWORD: "${{ secrets.POSTGRES_PASSWORD }}"
+  MY_RENDER_SERVICE_ID: "${{ secrets.MY_RENDER_SERVICE_ID }}"
+  MY_RENDER_API_KEY: "${{ secrets.MY_RENDER_API_KEY }}"
+  SLACK_WEBHOOK_URL: "${{ secrets.SLACK_WEBHOOK_URL }}"
 ```
 
 The workflow demonstrates a comprehensive CI/CD setup for a Node.js application, including testing, deployment, and notifications.
