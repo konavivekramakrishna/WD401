@@ -408,20 +408,6 @@ jobs:
 
 This GitHub Actions workflow automates the Continuous Integration (CI) and Continuous Deployment (CD) process for a Node.js application. The workflow consists of three main jobs:
 
-1. **run-tests**: Runs unit tests and integration tests for the application.
-2. **deploy**: Deploys the application to production.
-3. **notify**: Sends Slack notifications based on the success or failure of the tests and deployment.
-
-The workflow is triggered on every push event to the repository.
-
-## Env Variables
-```yaml
-env:
-  PG_DATABASE: "${{ secrets.POSTGRES_DATABASE }}"
-  PG_USER: "${{ secrets.POSTGRES_USER }}"
-  PG_PASSWORD: "${{ secrets.POSTGRES_PASSWORD }}"
-```
-
 ### jobs:
 
 1. **run-tests**: This job runs on the latest version of Ubuntu and defines a PostgreSQL service for running tests. The steps include checking out the repository code, installing dependencies, running unit tests, running the application, and executing integration tests using Cypress.
@@ -429,5 +415,16 @@ env:
 2. **deploy**: This job runs on the latest version of Ubuntu and is triggered if the run-tests job is successful. It deploys the application to production using a custom action that interacts with the Render platform.
 
 3. **notify**: This job sends Slack notifications based on the success or failure of the tests and deployment. It includes steps to send Slack notifications using the slackapi/slack-github-action action.
+
+The workflow is triggered on every push event to the repository.
+
+## Env Variables
+
+```yaml
+env:
+  PG_DATABASE: "${{ secrets.POSTGRES_DATABASE }}"
+  PG_USER: "${{ secrets.POSTGRES_USER }}"
+  PG_PASSWORD: "${{ secrets.POSTGRES_PASSWORD }}"
+```
 
 The workflow demonstrates a comprehensive CI/CD setup for a Node.js application, including testing, deployment, and notifications.
