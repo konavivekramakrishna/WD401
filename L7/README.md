@@ -33,6 +33,8 @@ CMD node index.js
 6. `PROD_DB_PASSWORD`: This environment variable is used to set the password of the production database.
 7. `PROD_DB_NAME`: This environment variable is used to set the name of the production database.
 
+[Video Link](https://www.loom.com/share/06966c93b2ee4de59c5d6b037775c7a9?sid=f84673ec-e17a-443f-889b-781a42c92d25)
+
 ## Docker Compose for Multiple Services:
 
 ### docker-compose.yml
@@ -289,3 +291,6 @@ Ensure the following secrets are added to the repository for the workflow to fun
 - `DOCKER_USERNAME`, `DOCKER_TOKEN`: Docker Hub credentials for pushing Docker images.
 - `MY_RENDER_SERVICE_ID`, `MY_RENDER_API_KEY`: Render service and API key for deployment.
 - `SLACK_WEBHOOK_URL`: Slack webhook URL for notifications.
+
+
+ *Video Demonstration* [*Link*](https://www.loom.com/share/06966c93b2ee4de59c5d6b037775c7a9?sid=f84673ec-e17a-443f-889b-781a42c92d25)
